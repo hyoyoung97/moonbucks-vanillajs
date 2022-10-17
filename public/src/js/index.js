@@ -23,9 +23,6 @@
 // step2 요구사항
 // TODO localStorage Read & Write
 // - [ ] localStorage 에 데이터를 저장한다.
-// - [ ] 추가
-// - [ ] 수정
-// - [ ] 삭제
 // - [ ] localStorage 에 있는 데이터를 읽어온다.
 
 // TODO 카테고리별 메뉴판 관리
@@ -55,20 +52,16 @@ const store = {
 
 function App() {
   // 상태는 변하는 데이터, 이 앱에서 변하는 것은 무엇인가 - 메뉴명
-  this.menu = [];
-
   const addMenuName = () => {
     if ($("#espresso-menu-name").value === '') {
       alert("값을 입력해주세요.");
       return;
     }
     const espressoMenuName = $("#espresso-menu-name").value;
-    this.menu.push({name: espressoMenuName});
-    store.setLocalStorage(this.menu);
-    const template =  this.menu.map((menuItem, index) => {
+    const menuItemTemplate = (espressoMenuName) => {
       return `
-        <li data-menu-id="${index}" class="menu-list-item d-flex items-center py-2">
-          <span class="w-100 pl-2 menu-name">${menuItem.name}</span> 
+        <li class="menu-list-item d-flex items-center py-2">
+          <span class="w-100 pl-2 menu-name">${espressoMenuName}</span>
           <button
           type="button"
           class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
@@ -82,9 +75,8 @@ function App() {
           삭제
           </button>
         </li>`
-    }).join("");
-
-    $("#espresso-menu-list").innerHTML = template;
+    };
+    $("#espresso-menu-list").insertAdjacentHTML('beforeend', menuItemTemplate(espressoMenuName));
     updateMenuCount();
     $("#espresso-menu-name").value = '';
   }
@@ -136,4 +128,4 @@ function App() {
   })
 }
 
-const app = new App();
+App();
