@@ -19,34 +19,6 @@
 const $ = (selector) => document.querySelector(selector);
 
 function App() {
-  // form 태그가 자동으로 전송되는 것을 막아준다. submit: form 이 전송되는 이벤트 명
-  $("#espresso-menu-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-  })
-
-  // 추가 - 확인버튼
-  $("#espresso-menu-submit-button").addEventListener("click", (e) => {
-    addMenuName();
-  })
-
-  // 추가 - 엔터키
-  $("#espresso-menu-name").addEventListener("keypress", (e) => {
-    if (e.key !== "Enter") {
-      return;
-    }
-    addMenuName();
-  })
-
-  // 수정/삭제 - 버튼
-  $("#espresso-menu-list").addEventListener("click", (e) => {
-    if (e.target.classList.contains("menu-edit-button")) {
-      updateMenuName(e);
-    }
-    if (e.target.classList.contains("menu-remove-button")) {
-      removeMenuName(e);
-    }
-  })
-
   const addMenuName = () => {
     if ($("#espresso-menu-name").value === '') {
       alert("값을 입력해주세요.");
@@ -93,6 +65,34 @@ function App() {
       updateMenuCount();
     }
   }
+
+  // form 태그가 자동으로 전송되는 것을 막아준다. submit: form 이 전송되는 이벤트 명
+  $("#espresso-menu-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+  })
+
+  // 추가 - 확인버튼
+  $("#espresso-menu-submit-button").addEventListener("click", (e) => {
+    addMenuName();
+  })
+
+  // 추가 - 엔터키
+  $("#espresso-menu-name").addEventListener("keypress", (e) => {
+    if (e.key !== "Enter") {
+      return;
+    }
+    addMenuName();
+  })
+
+  // 수정/삭제 - 버튼
+  $("#espresso-menu-list").addEventListener("click", (e) => {
+    if (e.target.classList.contains("menu-edit-button")) {
+      updateMenuName(e);
+    }
+    if (e.target.classList.contains("menu-remove-button")) {
+      removeMenuName(e);
+    }
+  })
 }
 
 App();
