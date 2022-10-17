@@ -95,8 +95,11 @@ function App() {
   }
 
   const updateMenuName = (e) => {
+    const menuId = e.target.closest("li").dataset.menuId;
     const $menuName = e.target.closest("li").querySelector(".menu-name");
     const updateMenuName = prompt("메뉴명을 수정해 주세요", $menuName.innerText);
+    this.menu[menuId].name = updateMenuName;
+    store.setLocalStorage(this.menu);
     $menuName.innerText = updateMenuName;
   }
 
