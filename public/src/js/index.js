@@ -49,22 +49,21 @@ const store = {
     localStorage.setItem("menu", JSON.stringify(menu));
   },
   getLocalStorage() {
-    localStorage.getItem("menu");
+    return JSON.parse(localStorage.getItem("menu"));  // 문자열을 다시 객체로 변경
   }
 }
 
 function App() {
   // 상태는 변하는 데이터, 이 앱에서 변하는 것은 무엇인가 - 메뉴명
   this.menu = [];
-
-  const addMenuName = () => {
-    if ($("#espresso-menu-name").value === '') {
-      alert("값을 입력해주세요.");
-      return;
+  this.init = () => {
+    if (store.getLocalStorage().length > 1) {
+      this.menu = store.getLocalStorage();
     }
-    const espressoMenuName = $("#espresso-menu-name").value;
-    this.menu.push({name: espressoMenuName});
-    store.setLocalStorage(this.menu);
+    render();
+  }
+
+  const render = () => {
     const template =  this.menu.map((menuItem, index) => {
       return `
         <li data-menu-id="${index}" class="menu-list-item d-flex items-center py-2">
@@ -86,6 +85,17 @@ function App() {
 
     $("#espresso-menu-list").innerHTML = template;
     updateMenuCount();
+  }
+
+  const addMenuName = () => {
+    if ($("#espresso-menu-name").value === '') {
+      alert("값을 입력해주세요.");
+      return;
+    }
+    const espressoMenuName = $("#espresso-menu-name").value;
+    this.menu.push({name: espressoMenuName});
+    store.setLocalStorage(this.menu);
+    render();
     $("#espresso-menu-name").value = '';
   }
 
@@ -143,3 +153,4 @@ function App() {
 }
 
 const app = new App();
+app.init();
