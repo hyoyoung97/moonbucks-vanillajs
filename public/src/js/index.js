@@ -36,11 +36,10 @@
 // TODO 페이지 접근 시 최초 데이터 Read & Rendering
 // - [x] 페이지에 최초로 접근할 때 localStorage 에 에스프레소 메뉴에 읽어온다.
 // - [x] 에스프레소 메뉴를 페이지에 그려준다.
-
 // TODO 품질 상태 관리
-// - [ ] 품절 버튼을 추가한다.
-// - [ ] 품절 버튼을 클릭하면 localStorage 의 상태값이 저장된다.
-// - [ ] 클릭 이벤트에서 가장 가까운 li 태그의 class 속성 값에 `sold-out` class 를 추가한다.
+// - [x] 품절 버튼을 추가한다.
+// - [x] 품절 버튼을 클릭하면 localStorage 의 상태값이 저장된다.
+// - [x] 메뉴명이 나오는 span 태그의 class 속성 값에 `sold-out` class 를 추가한다.
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -76,7 +75,13 @@ function App() {
     const template =  this.menu[this.currentCategory].map((menuItem, index) => {
       return `
         <li data-menu-id="${index}" class="menu-list-item d-flex items-center py-2">
-          <span class="w-100 pl-2 menu-name">${menuItem.name}</span> 
+          <span class="${menuItem.soldOut ? "sold-out" : ""} w-100 pl-2 menu-name">${menuItem.name}</span> 
+           <button
+           type="button"
+           class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
+           >
+           품절
+          </button>
           <button
           type="button"
           class="bg-gray-50 text-gray-500 text-sm mr-1 menu-edit-button"
@@ -132,6 +137,14 @@ function App() {
     }
   }
 
+  const soldOutMenu = (e) => {
+    const menuId = e.target.closest("li").dataset.menuId;
+    this.menu[this.currentCategory][menuId].soldOut = !this.menu[this.currentCategory][menuId].soldOut;
+    store.setLocalStorage(this.menu);
+    console.log(this.menu);
+    render();
+  }
+
   // form 태그가 자동으로 전송되는 것을 막아준다. submit: form 이 전송되는 이벤트 명
   $("#menu-form").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -150,13 +163,19 @@ function App() {
     addMenuName();
   })
 
-  // 수정/삭제 - 버튼
+  // 수정/삭제/품절 - 버튼
   $("#menu-list").addEventListener("click", (e) => {
     if (e.target.classList.contains("menu-edit-button")) {
       updateMenuName(e);
+      return;
     }
     if (e.target.classList.contains("menu-remove-button")) {
       removeMenuName(e);
+      return;
+    }
+    if (e.target.classList.contains("menu-sold-out-button")) {
+      soldOutMenu(e);
+      return;
     }
   })
 
