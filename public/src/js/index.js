@@ -41,16 +41,8 @@
 // - [x] 품절 버튼을 클릭하면 localStorage 의 상태값이 저장된다.
 // - [x] 메뉴명이 나오는 span 태그의 class 속성 값에 `sold-out` class 를 추가한다.
 
-const $ = (selector) => document.querySelector(selector);
-
-const store = {
-  setLocalStorage(menu) {
-    localStorage.setItem("menu", JSON.stringify(menu));
-  },
-  getLocalStorage() {
-    return JSON.parse(localStorage.getItem("menu"));  // 문자열을 다시 객체로 변경
-  }
-}
+import {$} from "./utils/dom.js";
+import store from "./store/index.js";
 
 function App() {
   // 상태는 변하는 데이터, 이 앱에서 변하는 것은 무엇인가 - 메뉴명
@@ -69,6 +61,7 @@ function App() {
       this.menu = store.getLocalStorage();
     }
     render();
+    initEventListeners();
   }
 
   const render = () => {
@@ -114,8 +107,7 @@ function App() {
   }
 
   const updateMenuCount = () => {
-    const menuCount = $("#menu-list").querySelectorAll("li").length;
-    $(".menu-count").innerText = `총 ${menuCount}개`
+    $(".menu-count").innerText = `총 ${this.menu[this.currentCategory].length}개`
   }
 
   const updateMenuName = (e) => {
@@ -124,7 +116,7 @@ function App() {
     const updateMenuName = prompt("메뉴명을 수정해 주세요", $menuName.innerText);
     this.menu[this.currentCategory][menuId].name = updateMenuName;
     store.setLocalStorage(this.menu);
-    $menuName.innerText = updateMenuName;
+    render();
   }
 
   const removeMenuName = (e) => {
@@ -132,8 +124,7 @@ function App() {
       const menuId = e.target.closest("li").dataset.menuId;
       this.menu[this.currentCategory].splice(menuId, 1);
       store.setLocalStorage(this.menu);
-      e.target.closest("li").remove();
-      updateMenuCount();
+      render();
     }
   }
 
@@ -145,49 +136,52 @@ function App() {
     render();
   }
 
-  // form 태그가 자동으로 전송되는 것을 막아준다. submit: form 이 전송되는 이벤트 명
-  $("#menu-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-  })
+  const initEventListeners = () => {
 
-  // 추가 - 확인버튼
-  $("#menu-submit-button").addEventListener("click", (e) => {
-    addMenuName();
-  })
+    // form 태그가 자동으로 전송되는 것을 막아준다. submit: form 이 전송되는 이벤트 명
+    $("#menu-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+    })
 
-  // 추가 - 엔터키
-  $("#menu-name").addEventListener("keypress", (e) => {
-    if (e.key !== "Enter") {
-      return;
-    }
-    addMenuName();
-  })
+    // 추가 - 확인버튼
+    $("#menu-submit-button").addEventListener("click", (e) => {
+      addMenuName();
+    })
 
-  // 수정/삭제/품절 - 버튼
-  $("#menu-list").addEventListener("click", (e) => {
-    if (e.target.classList.contains("menu-edit-button")) {
-      updateMenuName(e);
-      return;
-    }
-    if (e.target.classList.contains("menu-remove-button")) {
-      removeMenuName(e);
-      return;
-    }
-    if (e.target.classList.contains("menu-sold-out-button")) {
-      soldOutMenu(e);
-      return;
-    }
-  })
+    // 추가 - 엔터키
+    $("#menu-name").addEventListener("keypress", (e) => {
+      if (e.key !== "Enter") {
+        return;
+      }
+      addMenuName();
+    })
 
-  $("nav").addEventListener("click", (e) => {
-    const isCategoryButton = e.target.classList.contains("cafe-category-name");
-    if (isCategoryButton) {
-      const categoryName = e.target.dataset.categoryName;
-      this.currentCategory = categoryName;
-      $("#category-title").innerText = `${e.target.innerText} 메뉴 관리`;
-      render();
-    }
-  })
+    // 수정/삭제/품절 - 버튼
+    $("#menu-list").addEventListener("click", (e) => {
+      if (e.target.classList.contains("menu-edit-button")) {
+        updateMenuName(e);
+        return;
+      }
+      if (e.target.classList.contains("menu-remove-button")) {
+        removeMenuName(e);
+        return;
+      }
+      if (e.target.classList.contains("menu-sold-out-button")) {
+        soldOutMenu(e);
+        return;
+      }
+    })
+
+    $("nav").addEventListener("click", (e) => {
+      const isCategoryButton = e.target.classList.contains("cafe-category-name");
+      if (isCategoryButton) {
+        const categoryName = e.target.dataset.categoryName;
+        this.currentCategory = categoryName;
+        $("#category-title").innerText = `${e.target.innerText} 메뉴 관리`;
+        render();
+      }
+    })
+  }
 }
 
 const app = new App();
