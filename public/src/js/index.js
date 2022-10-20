@@ -16,7 +16,7 @@
 // - [ ] 중복되는 메뉴는 추가할 수 없다.
 
 import {$} from "./utils/dom.js";
-import store from "./store/index.js";
+import localStore from "./localStore/index.js";
 
 function App() {
   // 상태는 변하는 데이터, 이 앱에서 변하는 것은 무엇인가 - 메뉴명
@@ -31,8 +31,8 @@ function App() {
   this.currentCategory = "espresso";
 
   this.init = () => {
-    if (store.getLocalStorage()) {
-      this.menu = store.getLocalStorage();
+    if (localStore.getLocalStorage()) {
+      this.menu = localStore.getLocalStorage();
     }
     render();
     initEventListeners();
@@ -75,7 +75,7 @@ function App() {
     }
     const menuName = $("#menu-name").value;
     this.menu[this.currentCategory].push({name: menuName});
-    store.setLocalStorage(this.menu);
+    localStore.setLocalStorage(this.menu);
     render();
     $("#menu-name").value = '';
   }
@@ -89,7 +89,7 @@ function App() {
     const $menuName = e.target.closest("li").querySelector(".menu-name");
     const updateMenuName = prompt("메뉴명을 수정해 주세요", $menuName.innerText);
     this.menu[this.currentCategory][menuId].name = updateMenuName;
-    store.setLocalStorage(this.menu);
+    localStore.setLocalStorage(this.menu);
     render();
   }
 
@@ -97,7 +97,7 @@ function App() {
     if (confirm("정말 삭제할까요?")) {
       const menuId = e.target.closest("li").dataset.menuId;
       this.menu[this.currentCategory].splice(menuId, 1);
-      store.setLocalStorage(this.menu);
+      localStore.setLocalStorage(this.menu);
       render();
     }
   }
@@ -105,7 +105,7 @@ function App() {
   const soldOutMenu = (e) => {
     const menuId = e.target.closest("li").dataset.menuId;
     this.menu[this.currentCategory][menuId].soldOut = !this.menu[this.currentCategory][menuId].soldOut;
-    store.setLocalStorage(this.menu);
+    localStore.setLocalStorage(this.menu);
     console.log(this.menu);
     render();
   }
