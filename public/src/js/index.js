@@ -18,6 +18,8 @@
 import {$} from "./utils/dom.js";
 import localStore from "./localStore/index.js";
 
+const BASE_URL = "http://localhost:3001/api/";
+
 function App() {
   // 상태는 변하는 데이터, 이 앱에서 변하는 것은 무엇인가 - 메뉴명
   this.menu = {
@@ -68,16 +70,36 @@ function App() {
     updateMenuCount();
   }
 
-  const addMenuName = () => {
+  const addMenuName = async () => {
     if ($("#menu-name").value === '') {
       alert("값을 입력해주세요.");
       return;
     }
     const menuName = $("#menu-name").value;
-    this.menu[this.currentCategory].push({name: menuName});
-    localStore.setLocalStorage(this.menu);
-    render();
-    $("#menu-name").value = '';
+
+    await fetch(`${BASE_URL}/category/${this.currentCategory}/menu`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({name: menuName})
+    })
+        .then(reponse => {
+          return reponse.json();
+        })
+        .then(data => {
+          console.log(data);
+        })
+
+    await fetch(`${BASE_URL}/category/${this.currentCategory}/menu`)
+        .then(reponse => {
+          return reponse.json();
+        })
+        .then(data => {
+          this.menu[this.currentCategory] = data;
+          render();
+          $("#menu-name").value = '';
+        })
   }
 
   const updateMenuCount = () => {
