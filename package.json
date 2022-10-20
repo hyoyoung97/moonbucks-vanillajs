@@ -6,12 +6,17 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "ejs": "^3.1.8",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11"
+    "body-parser": "^1.20.1",
+    "connect-livereload": "^0.6.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "debug": "^2.6.9",
+    "express": "^4.16.4",
+    "http-errors": "^1.8.0",
+    "jade": "^1.11.0",
+    "livereload": "^0.9.3",
+    "morgan": "^1.9.1",
+    "nanoid": "^3.1.25",
+    "path": "^0.12.7"
   }
 }
