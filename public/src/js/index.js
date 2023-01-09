@@ -92,8 +92,8 @@ function App() {
         })
 
     await fetch(`${BASE_URL}/category/${this.currentCategory}/menu`)
-        .then(reponse => {
-          return reponse.json();
+        .then(response => {
+          return response.json();
         })
         .then(data => {
           this.menu[this.currentCategory] = data;
