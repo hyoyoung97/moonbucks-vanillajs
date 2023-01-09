@@ -25,8 +25,8 @@
   <a href="https://blackcoffee-study.github.io/moonbucks-menu/">🖥️ 데모 링크</a>
 </p>
 
-<br/>
-
+- `moonbucks-menu`와 `moonbucks-menu-server` 가 합쳐진 프로젝트입니다.
+ 
 ## 🎯 step1 요구사항 - 돔 조작과 이벤트 핸들링으로 메뉴 관리하기
 
 - [ ] 에스프레소 메뉴에 새로운 메뉴를 확인 버튼 또는 엔터키 입력으로 추가한다.
